@@ -1,6 +1,5 @@
 import { Bar } from 'react-chartjs-2';
 import 'chart.js/auto';
-import Alert from './Alert';
 
 const formatDate = (dateString) => {
     const options = { month: 'short', day: 'numeric' };
@@ -8,13 +7,6 @@ const formatDate = (dateString) => {
 }
 
 const Result = ({ totalCommits, commitInfoList }) => {
-    if (!totalCommits || !commitInfoList) {
-        return (
-            <div className="text-white">
-                조회 결과가 없습니다.
-            </div>
-        );
-    }
 
     const startDate = new Date('2023-07-18');
     const endDate = new Date('2023-08-15');
