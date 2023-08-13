@@ -17,6 +17,7 @@ app.use(rateLimit({
         max: 200
     })
 );
+app.options('*', cors());
 
 app.post('/result', async (req,res) => {
     const { id } = req.body
