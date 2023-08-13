@@ -15,9 +15,9 @@ app.use(rateLimit({
         max: 200
     })
 );
-app.options('*', cors);
+app.options('*', cors());
 
-app.post('/result', cors, async (req,res) => {
+app.post('/result', async (req,res) => {
     console.log('/result')
     const { id } = req.body
     console.log(req.body)
@@ -145,7 +145,7 @@ app.post('/result', cors, async (req,res) => {
 })
 
 
-app.get('*', cors, (req, res) => {
+app.get('*', (req, res) => {
     console.log('/*')
     res.sendFile(path.join(__dirname, '../react-build/index.html'))
 })
