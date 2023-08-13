@@ -6,9 +6,9 @@ const cheerio = require('cheerio');
 const axios = require('axios');
 var rateLimit = require("express-rate-limit"); 
 
+app.use(cors());
 app.use(express.static(path.join(__dirname, '../react-build')))
 app.use(express.json());
-app.use(cors);
 
 app.use(rateLimit({
         windowMs: 1*60*1000, 

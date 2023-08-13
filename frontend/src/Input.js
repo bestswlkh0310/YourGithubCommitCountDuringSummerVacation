@@ -17,7 +17,7 @@ const Input = () => {
     };
     const handleButtonClick = async () => {
         try {
-            const res = await fetch('https://localhost:3001/result', {
+            const res = await fetch('https://port-0-vacation-commit-3prof2lll9dg20y.sel3.cloudtype.app/result', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
