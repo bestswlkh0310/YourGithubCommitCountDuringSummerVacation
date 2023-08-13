@@ -5,7 +5,7 @@ var app = express();
 const cheerio = require('cheerio');
 const axios = require('axios');
 
-app.use(express.static(path.join(__dirname, '../front/build')))
+app.use(express.static(path.join(__dirname, '../frontend/build')))
 app.use(express.json());
 app.use(cors());
 
@@ -13,47 +13,53 @@ app.post('/result', async (req,res) => {
     const { id } = req.body
     console.log(req.body)
     const url = `https://github.com/${id}`;
-    const response = await axios.get(url);
+    var response
+    try {
+        response = await axios.get(url);
 
-    const isVacation = (date) => {
-        const commitDate = new Date(date);
-        const startDate = new Date('2023-07-18');
-        const endDate = new Date('2023-08-15');
-        return commitDate >= startDate && commitDate <= endDate;
-    }
+        const isVacation = (date) => {
+            const commitDate = new Date(date);
+            const startDate = new Date('2023-07-18');
+            const endDate = new Date('2023-08-15');
+            return commitDate >= startDate && commitDate <= endDate;
+        }
 
-    if (response.status === 200) {
-        const html = await response.data;
-        const $ = cheerio.load(html);
+        if (response.status === 200) {
+            const html = await response.data;
+            const $ = cheerio.load(html);
 
-        const grassSelector = 'tbody';
-        const grassData = $(grassSelector);
-        let totalCommits = 0;
-        const result = []
+            const grassSelector = 'tbody';
+            const grassData = $(grassSelector);
+            let totalCommits = 0;
+            const result = []
 
-        grassData.find('td').each((index, element) => {
-            const dateString = $(element).attr('data-date');
-            const span = $(element).find('span');
-            t = span.text().split(' ')[0]
-            if (t != "No" && dateString != undefined && isVacation(dateString)) {
-                const contributions = parseInt(t);
-                totalCommits += contributions;
-                console.log(dateString, contributions);
-                result.push({
-                    date: dateString,
-                    count: contributions
-                })
-            }
-        });
-        result.sort((a, b) => (a.date > b.date) ? 1 : -1);
+            grassData.find('td').each((index, element) => {
+                const dateString = $(element).attr('data-date');
+                const span = $(element).find('span');
+                t = span.text().split(' ')[0]
+                if (t != "No" && dateString != undefined && isVacation(dateString)) {
+                    const contributions = parseInt(t);
+                    totalCommits += contributions;
+                    console.log(dateString, contributions);
+                    result.push({
+                        date: dateString,
+                        count: contributions
+                    })
+                }
+            });
+            result.sort((a, b) => (a.date > b.date) ? 1 : -1);
 
-        console.log('Total contributions:', totalCommits);
-        res.send({
-            total: totalCommits,
-            commits: result
-        });
-    } else {
-      res.send('GitHub 프로필을 찾을 수 없습니다.');
+            console.log('Total contributions:', totalCommits);
+            res.send({
+                total: totalCommits,
+                commits: result
+            });
+        } else {
+        res.send('GitHub 프로필을 찾을 수 없습니다.');
+        }
+    } catch (e) {
+        console.log(e)
+        res.status(404).send('Github 프로필을 찾을 수 없습니다')
     }
 
     // github api 는 개쓰레기야

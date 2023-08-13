@@ -1,44 +1,17 @@
-import React, { useState } from 'react';
-const formatDate = (dateString) => {
-    const options = { month: 'short', day: 'numeric' };
-    return new Date(dateString).toLocaleDateString('ko-KR', options);
-}
-
-const Result = ({ totalCommits, commitInfoList }) => {
-    if (totalCommits === null || commitInfoList === null) {
-        return (
-            <div className="text-white">
-                조회 결과가 없습니다.
-            </div>
-        );
-    }
-
-    const filteredCommitInfoList = commitInfoList.filter(commitInfo => {
-        const commitDate = new Date(commitInfo.date);
-        const startDate = new Date('2023-07-18');
-        const endDate = new Date('2023-08-15');
-        return commitDate >= startDate && commitDate <= endDate;
-    });
-    
-    return (
-        <div className="bg-gray-800 p-4 rounded-lg mt-4">
-            <h2 className="text-xl font-semibold text-white mb-4">조회 결과</h2>
-            <p className="text-white">총 커밋 수: {totalCommits}</p>
-            <div className="overflow-y-auto max-h-48 mt-4">
-                {filteredCommitInfoList.map((commitInfo, index) => (
-                    <div key={index} className="bg-gray-700 p-3 rounded-md mt-2">
-                        <p className="text-gray-400">{formatDate(commitInfo.date)} - {commitInfo.count}번</p>
-                    </div>
-                ))}
-            </div>
-        </div>
-    );
-}
+import React, { useState, useEffect } from 'react';
+import ReactModal from 'react-modal';
+import Alert from './Alert';
+import Result from './Result';
 
 
 const Input = () => {
     const [inputValue, setInputValue] = useState('');
+    const [errorMessage, setErrorMessage] = useState(null);
     const [result, setResult] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    useEffect(() => {
+        ReactModal.setAppElement('#root');
+    }, []);
 
     const handleInputChange = (e) => {
         setInputValue(e.target.value);
@@ -55,15 +28,23 @@ const Input = () => {
             const data = await res.json()
             console.log(data)
             setResult(data);
+            setIsModalOpen(true);
         } catch (e) {
-            console.log(e)
+            setErrorMessage('Github 프로필을 찾을 수 없습니다')
+            setTimeout(() => {
+                setErrorMessage(null);
+            }, 3000);
         }
+    };
+
+    const handleModalClose = () => {
+        setIsModalOpen(false);
     };
 
     return (
         <div className="flex flex-col justify-center items-center h-screen">
             <h1 className="text-2xl font-bold text-white mb-4">방학 때 얼마나 커밋을 했을까요...</h1>
-            <div className="bg-gray-800 p-2 rounded-lg shadow-md w-80 mb-4">
+            <div className="bg-gray-800 p-1 rounded-lg shadow-md w-80 mb-4">
                 <input
                     className="w-full bg-gray-700 border border-gray-600 rounded px-3 py-2 text-white placeholder-gray-400 focus:outline-none focus:border-blue-500"
                     type="text"
@@ -77,10 +58,50 @@ const Input = () => {
                 className="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded focus:outline-none">
                 조회하기
             </button>
-            <Result
+            {errorMessage && (
+            <Alert message={errorMessage} onClose={() => setErrorMessage(null)} />
+            )}
+            {/* <Result
                 totalCommits={result ? result.total : null}
                 commitInfoList={result ? result.commits : null}
-            />
+            /> */}
+           <ReactModal
+            isOpen={isModalOpen}
+            onRequestClose={handleModalClose}
+            className="Modal"
+            overlayClassName="Overlay"
+            style={{
+                content: {
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    width: '60vw',
+                    minWidth: '350px',
+                    background: '#2D3748',
+                    border: '1px solid #111',
+                    padding: '1rem',
+                    borderRadius: '0.5rem',
+                    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+                }
+            }}
+        >
+            <div className="flex flex-col h-full items-center">
+                {result ? (
+                    <Result
+                        totalCommits={result.total}
+                        commitInfoList={result.commits}
+                    />
+                ) : (
+                    <p className="text-gray-600">조회 결과가 없습니다.</p>
+                )}
+                <button
+                    onClick={handleModalClose}
+                    className="mt-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded focus:outline-none">
+                    닫기
+                </button>
+            </div>
+        </ReactModal>
         </div>
     )
 }
