@@ -4,10 +4,17 @@ var cors = require('cors');
 var app = express();
 const cheerio = require('cheerio');
 const axios = require('axios');
+var rateLimit = require("express-rate-limit"); 
 
 app.use(express.static(path.join(__dirname, '../frontend/build')))
 app.use(express.json());
 app.use(cors());
+
+app.use(rateLimit({ 
+        windowMs: 1*60*1000, 
+        max: 20
+    })
+);
 
 app.post('/result', async (req,res) => {
     const { id } = req.body

@@ -25,11 +25,19 @@ const Input = () => {
                 },
                 body: JSON.stringify({ id: inputValue }),
             });
+            if (res.status == 429) {
+                setErrorMessage('서버가 힘들어해요')
+                setTimeout(() => {
+                    setErrorMessage(null);
+                }, 3000);
+                return
+            }
             const data = await res.json()
             console.log(data)
             setResult(data);
             setIsModalOpen(true);
         } catch (e) {
+            console.log(e.message)
             setErrorMessage('Github 프로필을 찾을 수 없습니다')
             setTimeout(() => {
                 setErrorMessage(null);
