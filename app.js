@@ -6,7 +6,7 @@ const cheerio = require('cheerio');
 const axios = require('axios');
 var rateLimit = require("express-rate-limit"); 
 
-app.use(express.static(path.join(__dirname, '../frontend/build')))
+app.use(express.static(path.join(__dirname, './react-build')))
 app.use(express.json());
 app.use(cors());
 
@@ -144,7 +144,7 @@ app.post('/result', async (req,res) => {
 
 
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../front/build/index.html'))
+    res.sendFile(path.join(__dirname, './react-build/index.html'))
 })
 
 app.listen(3001, () => {
