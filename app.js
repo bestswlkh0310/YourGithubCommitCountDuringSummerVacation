@@ -8,7 +8,9 @@ var rateLimit = require("express-rate-limit");
 
 app.use(express.static(path.join(__dirname, '../react-build')))
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+    origin: '*'
+}));
 
 app.use(rateLimit({ 
         windowMs: 1*60*1000, 
