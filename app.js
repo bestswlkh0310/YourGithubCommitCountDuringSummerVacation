@@ -8,18 +8,17 @@ var rateLimit = require("express-rate-limit");
 
 app.use(express.static(path.join(__dirname, '../react-build')))
 app.use(express.json());
-app.use(cors({
-    origin: '*'
-}));
+app.use(cors);
 
-app.use(rateLimit({ 
+app.use(rateLimit({
         windowMs: 1*60*1000, 
         max: 200
     })
 );
-app.options('*', cors());
+app.options('*', cors);
 
-app.post('/result', cors(), async (req,res) => {
+app.post('/result', cors, async (req,res) => {
+    console.log('/result')
     const { id } = req.body
     console.log(req.body)
     const url = `https://github.com/${id}`;
@@ -146,7 +145,8 @@ app.post('/result', cors(), async (req,res) => {
 })
 
 
-app.get('*', cors(), (req, res) => {
+app.get('*', cors, (req, res) => {
+    console.log('/*')
     res.sendFile(path.join(__dirname, '../react-build/index.html'))
 })
 
