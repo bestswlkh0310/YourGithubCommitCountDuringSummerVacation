@@ -17,7 +17,7 @@ const Input = () => {
     };
     const handleButtonClick = async () => {
         try {
-            const res = await fetch('http://localhost:3001/result', {
+            const res = await fetch('https://localhost:3001/result', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

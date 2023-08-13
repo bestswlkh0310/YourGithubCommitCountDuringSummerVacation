@@ -19,7 +19,7 @@ app.use(rateLimit({
 );
 app.options('*', cors());
 
-app.post('/result', async (req,res) => {
+app.post('/result', cors(), async (req,res) => {
     const { id } = req.body
     console.log(req.body)
     const url = `https://github.com/${id}`;
@@ -146,7 +146,7 @@ app.post('/result', async (req,res) => {
 })
 
 
-app.get('*', (req, res) => {
+app.get('*', cors(), (req, res) => {
     res.sendFile(path.join(__dirname, '../react-build/index.html'))
 })
 
