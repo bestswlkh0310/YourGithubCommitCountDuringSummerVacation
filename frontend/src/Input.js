@@ -8,6 +8,8 @@ const Input = () => {
     const [errorMessage, setErrorMessage] = useState(null);
     const [result, setResult] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+
     useEffect(() => {
         ReactModal.setAppElement('#root');
     }, []);
@@ -17,6 +19,7 @@ const Input = () => {
     };
     const handleButtonClick = async () => {
         try {
+            setIsLoading(true);
             const res = await fetch('https://port-0-vacation-commit-3prof2lll9dg20y.sel3.cloudtype.app/result', {
                 method: 'POST',
                 headers: {
@@ -24,6 +27,7 @@ const Input = () => {
                 },
                 body: JSON.stringify({ id: inputValue }),
             });
+            setIsLoading(false)
             if (res.status == 429) {
                 setErrorMessage('서버가 힘들어해요')
                 setTimeout(() => {
@@ -37,6 +41,7 @@ const Input = () => {
             setIsModalOpen(true);
         } catch (e) {
             console.log(e.message)
+            setIsLoading(false);
             setErrorMessage('Github 프로필을 찾을 수 없습니다')
             setTimeout(() => {
                 setErrorMessage(null);
@@ -62,8 +67,10 @@ const Input = () => {
             </div>
             <button
                 onClick={handleButtonClick}
-                className="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded focus:outline-none">
-                조회하기
+                className={`bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded focus:outline-none ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                disabled={isLoading} // 로딩 중에 버튼 비활성화
+            >
+                {isLoading ? '로딩 중...' : '조회하기'}
             </button>
             {errorMessage && (
             <Alert message={errorMessage} onClose={() => setErrorMessage(null)} />

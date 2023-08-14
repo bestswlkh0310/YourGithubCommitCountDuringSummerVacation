@@ -67,7 +67,7 @@ app.post('/result', async (req,res) => {
         res.send('GitHub 프로필을 찾을 수 없습니다.');
         }
     } catch (e) {
-        console.log(e)
+        console.log(e.message)
         res.status(404).send('Github 프로필을 찾을 수 없습니다')
     }
 
@@ -138,10 +138,13 @@ app.post('/result', async (req,res) => {
     //             console.error("GitHub API 호출에 실패하였습니다.");
     //         });
     // }
-    
 
     // fetchCommitEvents(page);
+})
 
+app.get('/heal', (req, res) => {
+    console.log('/heal')
+    res.send('heal')
 })
 
 
