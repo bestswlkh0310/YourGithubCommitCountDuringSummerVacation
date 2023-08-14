@@ -19,6 +19,42 @@ code {
     height: 100vh;
     position: relative;
 }
+.content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.content2 {
+  display: inline-block;
+  position: absolute;
+  left: 3%;
+  top: 20%;
+  height: 100%;
+}
+
+@media (min-width: 769px) {
+  .commit-info {
+    margin-right: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .commit-info {
+    margin-top: 20px;
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) and (orientation: landscape) {
+  .commit-info {
+    position: absolute;
+    margin-top: 0;
+    margin-right: 20px;
+    width: calc(50% - 20px);
+  }
+}
 
 @tailwind base;
 @tailwind components;
