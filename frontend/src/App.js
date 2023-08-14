@@ -10,7 +10,12 @@ const App = () => {
     const [result, setResult] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    const [users, setUsers] = useState([]);
+    const [users, setUsers] = useState([
+        {
+            name: 'dad',
+            total: 'qweqe'
+        }
+    ]);
     useEffect(() => {
         ReactModal.setAppElement('#root');
         usersFunc()

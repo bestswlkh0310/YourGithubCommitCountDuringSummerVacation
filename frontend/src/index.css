@@ -41,9 +41,22 @@ code {
 }
 
 @media (max-width: 768px) {
-  .commit-info {
-    margin-top: 20px;
-    width: 100%;
+  .content2 {
+    display: inline-block;
+    position: absolute;
+    top: 3%;
+    height: 100%;
+  }
+}
+
+.ahh {
+  height: 24rem;
+}
+
+
+@media (max-width: 770px) {
+  .ahh {
+    height: 10rem;
   }
 }
 
