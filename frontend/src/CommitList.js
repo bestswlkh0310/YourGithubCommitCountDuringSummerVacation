@@ -8,7 +8,7 @@ const CommitInfoList = ({ commitInfoList, callback }) => {
   return (
     <>
         <h1 className="text-2xl font-bold text-white mb-4">최근 조회된 Github 아이디</h1>
-        <div className="ahh shadow-md w-80 mt-4 overflow-auto">
+        <div className="ahh w-80 mt-4 overflow-auto">
             {!commitInfoList.length && <h3 className="text-1xl font-bold text-white mb-4">아직 아무도 조회하지 않았어요 ㅜㅜ</h3>}
             {commitInfoList.map((user, idx) => (
                 <button
